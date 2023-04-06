@@ -25,6 +25,7 @@
             <div class="row-content">
               <label class="label text" for="name">Name</label>
               <input class="input" type="text" id="name" name="name" placeholder="your name.." required>
+              <error-output class="name-error" for="name"></error-output>
             </div>
             <!-- UC 3 -->
             <div class="row-content">
@@ -81,7 +82,8 @@
 
             <!-- UC 5 -->
             <div class="row-content">
-              <label class="label text" for="startDate">Start Date:</label>
+              <label for="startDate">Start Date</label>
+              <input id="startDate" type="date" min="2023-04-01" max="2023-05-30"><br><br>
             <div>
             <select id="day" name="Day">
               <option value="1">1</option>
@@ -159,6 +161,15 @@
         const output = document.querySelector('.salary-output');
         salary.addEventListener('input',function(){
           output.innerHTML = salary.value;
+          });
+          
+          const name = document.querySelector('#name');
+          const nameerror = document.querySelector('.name-error');
+          name.addEventListener('input',function(){
+            let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');
+            if(nameRegex.test(name.value))
+            nameerror.textContent ="";
+            else nameerror.textContent ="Name is Incorrect";
           });
         </script>
 </body>
