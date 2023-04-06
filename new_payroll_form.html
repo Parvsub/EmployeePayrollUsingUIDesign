@@ -171,7 +171,38 @@
             nameerror.textContent ="";
             else nameerror.textContent ="Name is Incorrect";
           });
+
+          let departmentvalues = [];
+          let employeePayrollList = [];
+
+          //onform submit
+          function save(){
+            const profile = document.querySelector('input');
+            const gender = document.querySelector('input');
+            const Department = document.querySelector('input');
+            const day = document.querySelector('input');
+            const month=document.querySelector('input');
+            const year = document.querySelector('input');
+            let startDate = day.value + ' '+ month.value + ''+year.value;
+            checkbox.forEach((department)=>{
+              departmentvalues.push(department.value);
+            });
+            
+            window.alert(name.value+','+profile.value+','+gender.value+','+Department.value+','+startDate.value+','+notes.value);
+
+            if(window.localStorage.key(1)!=null){
+              employeePayrollList = JSON.parse(window.localStorage.getItem('employeePayrollDate'));
+            }
+
+            let newEmployee = {name : name.value,profile : profile.value,gender : gender.value,Department : Department.value,salary : salary.value,startDate: startDate.value,notes: notes.value};
+
+            employeePayrollList.push(newEmployee);
+
+            window.alert(employeePayrollList);
+
+            window.localStorage.setItem('employeePayrollData'.JSON.Stringify(employeePayrollList));
+          }
         </script>
-</body>
+    </body>
 </html>
 
