@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./new_payroll-form.css">
     <title>Employee payroll form</title>
+    <script src="./EmployeePayRoll.js"></script>
 </head>
 <body>
     <!-- UC 1 -->
@@ -82,15 +83,16 @@
 
             <!-- UC 5 -->
             <div class="row-content">
-              <label for="startDate">Start Date</label>
-              <input id="startDate" type="date" min="2023-04-01" max="2023-05-30"><br><br>
+              <label class="label text" for="startDate" >Start Date</label>
+              <input type="date" name="startDate" value="2020-02-01" min="2020-01-01" max="2020-03-31">
             <div>
             <select id="day" name="Day">
+              
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
-              <option value="5">5</option>
+              <option value="5">5</option> 
               <option value="6">6</option>
               <option value="7">7</option>
               <option value="8">8</option>
@@ -171,37 +173,6 @@
             nameerror.textContent ="";
             else nameerror.textContent ="Name is Incorrect";
           });
-
-          let departmentvalues = [];
-          let employeePayrollList = [];
-
-          //onform submit
-          function save(){
-            const profile = document.querySelector('input');
-            const gender = document.querySelector('input');
-            const Department = document.querySelector('input');
-            const day = document.querySelector('input');
-            const month=document.querySelector('input');
-            const year = document.querySelector('input');
-            let startDate = day.value + ' '+ month.value + ''+year.value;
-            checkbox.forEach((department)=>{
-              departmentvalues.push(department.value);
-            });
-            
-            window.alert(name.value+','+profile.value+','+gender.value+','+Department.value+','+startDate.value+','+notes.value);
-
-            if(window.localStorage.key(1)!=null){
-              employeePayrollList = JSON.parse(window.localStorage.getItem('employeePayrollDate'));
-            }
-
-            let newEmployee = {name : name.value,profile : profile.value,gender : gender.value,Department : Department.value,salary : salary.value,startDate: startDate.value,notes: notes.value};
-
-            employeePayrollList.push(newEmployee);
-
-            window.alert(employeePayrollList);
-
-            window.localStorage.setItem('employeePayrollData'.JSON.Stringify(employeePayrollList));
-          }
         </script>
     </body>
 </html>
