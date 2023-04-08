@@ -98,23 +98,31 @@ if (window.localStorage.key(1) !== null) {
 }
 
 
-// const resetForm = () => {
-//     setValue('#name','');
-//     unsetSelectionValues('[name=profile]');
-//     unsetSelectionValues('[name=gender]');
-//     unsetSelectionValues('[name=department]');
-//     setValue('#salary','');
-//     setValue('#notes','');
-//     setValue('#day','');
-//     setValue('#month','January');
-//     setValue('#year','2020');
-// }
+const resetForm = () => {
+    setValue('#name','');
+    unsetSelectionValues('[name=profile]');
+    unsetSelectionValues('[name=gender]');
+    unsetSelectionValues('[name=department]');
+    setValue('#salary','');
+    setValue('#notes','');
+    setValue('#day','');
+    setValue('#month','January');
+    setValue('#year','2020');
+}
 
-// const unsetSelectionValues = (propertyValue) => {
-//     let allItems = document.querySelectorAll(propertyValue);
-//     allItems.forEach(item =>{
-//         item.checked = false;
-//     });
-// }
+const unsetSelectionValues = (propertyValue) => {
+    let allItems = document.querySelectorAll(propertyValue);
+    allItems.forEach(item =>{
+        item.checked = false;
+    });
+}
 
-// const setTextValue =
+const setTextValue = (id, value) => {
+    const element = document.querySelector(id);
+    element.textContent = value;
+}
+
+const setValue = (id, value) => {
+    const element = document.querySelector(id);
+    element.value = value;
+}
