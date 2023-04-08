@@ -23,28 +23,41 @@ try{
 const save = () => {
     try {
         let employeePayrollData = createEmployeePayroll();
+        createAndUpdateStorage(employeePayrollData);
     } catch (e){
         return;
     }
 }
 
+function createAndUpdateStorage(employeePayrollData){
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+ 
+    if(employeePayrollList != undefined){
+        employeePayrollList.push(employeePayrollData);
+    } else {
+        employeePayrollList = [employeePayrollData]
+    }
+    alert(employeePayrollList.toString());
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+}
+
 const createEmployeePayroll = () => {
-    let employeePayrollData = new employeePayrollData();
+    let employeePayrollData = new EmployeePayrollData();
     try{
         employeePayrollData.name = getInputvalueById('#name');
     } catch (e){
         setTextValue('.text-erroe',e);
         throw e;
     }
-    employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
-    employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
-    employeePayrollData.department = getSelectedValues('[name=depertment]');
-    employeePayrollData.salary = getInputvalueById('#salary');
-    employeePayrollData.note = getInputvalueById('#notes');
+    EmployeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
+    EmployeePayrollData.gender = getSelectedValues('[name=gender]').pop();
+    EmployeePayrollData.department = getSelectedValues('[name=depertment]');
+    EmployeePayrollData.salary = getInputvalueById('#salary');
+    EmployeePayrollData.note = getInputvalueById('#notes');
     let date = getInputvalueById('#day')+" "+getInputvalueById('#month')+" "+getInputvalueById('#year');
-    employeePayrollData.date = Date.parse(date);
-    alert(employeePayrollData.toString());
-    return employeePayrollData;
+    EmployeePayrollData.date = Date.parse(date);
+    alert(EmployeePayrollData.toString());
+    return EmployeePayrollData;
     }
 
     const getSelectedValues = (propertyValue) => {
