@@ -43,7 +43,7 @@ body{
     align-items: center;
     border: 0px solid green;
 }
-error-output{
+#errormsg{
     margin-left: 10px;
     font-size:12px;
     font-style: italic;
