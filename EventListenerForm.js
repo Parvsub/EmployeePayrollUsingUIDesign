@@ -37,23 +37,26 @@ const createEmployeePayroll = () => {
         }
     
         const salary = document.querySelector('.salary-output');
-        const salRange = document.querySelector('#salary');
-        const username = document.querySelector('#name');
-        const nameError = document.querySelector('#errormsg');
-        let departmentValues = [];
-        let employeePayrollList = [];
-        username.addEventListener('input',function(){
-        let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');
-        if(nameRegex.test(username.value))
-        nameError.textContent ="";
-        else nameError.textContent ="Name is Incorrect";
-    
-});
+const salRange = document.querySelector('#salary');
+const username = document.querySelector('#name');
+const nameError = document.querySelector('#errormsg');
+const notes = document.querySelector('#notes');
+let departmentValues = [];
+let employeePayrollList = [];
 
+username.addEventListener('input', () => {
+  let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');
+  if (nameRegex.test(username.value)) {
+    username.style.border = '2px solid green';
+    nameError.style.visibility = 'hidden';
+  } else {
+    nameError.style.visibility = 'visible';
+    username.style.border = 'none';
+  }
+});
 salRange.addEventListener('input', () => {
   salary.innerHTML = salRange.value;
 });
-
 
 function save() {
     const profileImage = document.querySelector('input[name="profile"]:checked');
@@ -68,20 +71,8 @@ function save() {
     });
   
     window.alert(
-      username.value +
-        ',' +
-        salRange.value +
-        ',' +
-        profileImage.value +
-        ',' +
-        gender.value +
-        ',' +
-        departmentValues +
-        ',' +
-        startDate +
-        ',' +
-        notes.value
-    );
+      username.value +',' +salRange.value +',' +profileImage.value +',' +gender.value +',' +
+        departmentValues +',' +startDate +',' +notes.value);
 
 if (window.localStorage.key(1) !== null) {
     employeePayrollList = JSON.parse(
@@ -103,9 +94,27 @@ if (window.localStorage.key(1) !== null) {
 
   window.alert(employeePayrollList);
 
-  window.localStorage.setItem(
-    'employeePayrollData',
-    JSON.stringify(employeePayrollList)
-  );
+  window.localStorage.setItem('employeePayrollData',JSON.stringify(employeePayrollList));
+}
 
-  }
+
+// const resetForm = () => {
+//     setValue('#name','');
+//     unsetSelectionValues('[name=profile]');
+//     unsetSelectionValues('[name=gender]');
+//     unsetSelectionValues('[name=department]');
+//     setValue('#salary','');
+//     setValue('#notes','');
+//     setValue('#day','');
+//     setValue('#month','January');
+//     setValue('#year','2020');
+// }
+
+// const unsetSelectionValues = (propertyValue) => {
+//     let allItems = document.querySelectorAll(propertyValue);
+//     allItems.forEach(item =>{
+//         item.checked = false;
+//     });
+// }
+
+// const setTextValue =
