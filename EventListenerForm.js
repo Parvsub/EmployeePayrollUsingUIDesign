@@ -37,12 +37,12 @@ const createEmployeePayroll = () => {
         }
     
         const salary = document.querySelector('.salary-output');
-const salRange = document.querySelector('#salary');
-const username = document.querySelector('#name');
-const nameError = document.querySelector('#errormsg');
-const notes = document.querySelector('#notes');
-let departmentValues = [];
-let employeePayrollList = [];
+        const salRange = document.querySelector('#salary');
+        const username = document.querySelector('#name');
+        const nameError = document.querySelector('#errormsg');
+        const notes = document.querySelector('#notes');
+        let departmentValues = [];
+        let employeePayrollList = [];
 
 username.addEventListener('input', () => {
   let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');
