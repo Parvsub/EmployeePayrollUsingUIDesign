@@ -1,10 +1,10 @@
 class EmployeePayrollData{
     //getter and setter method
     get id(){
-        return this._id;
+        return this.id;
     }
     set id(id){
-        this._id = id;
+        this.id = id;
     }
     
 
@@ -16,47 +16,47 @@ class EmployeePayrollData{
         else throw 'Name is Incorrect';
     }
      
-    get profilePic(){
-        return this._profilePic;
+    get profileImage(){
+        return this.profileImage;
     }
-    set profilePic(profilePic){
-        this._profilePic = profilePic;
+    set profileImage(profileImage){
+        this.profileImage = profileImage;
     }
 
     get gender(){
-        return this._gender;
+        return this.gender;
     }
     set gender(gender){
-        this._gender = gender;
+        this.gender = gender;
     }
 
     get department(){
-        return this._department;
+        return this.department;
     }
     set department(department){
-        this._department = department;
+        this.department = department;
     }
 
     get salary(){
-        return this._salary;
+        return this.salary;
     }
-    set profilePic(salary){
-        this._salary = salary;
+    set salary(salary){
+        this.salary = salary;
     }
 
     get note(){
-        return this._note;
+        return this.note;
     }
     set note(note){
-        this._note = note;
+        this.note = note;
     }
 
     get startDate(){
-        return this._startDate; 
+        return this.startDate; 
     }
 
     set startDate(startDate){
-        this._startDate = startDate;
+        this.startDate = startDate;
     }
 
     //method
@@ -65,7 +65,7 @@ class EmployeePayrollData{
         const empDate = !this.startDate ? "undefined":
                           this.startDate.toLocaleDateString("en-US", options);
         return "id=" +this.id + ", name='" +this.name + ",gender='" +this.gender +
-               ",profilePic='" + this.profilePic + ", department=" + this.department +
+               ",profileImage='" + this.profileImage + ", department=" + this.department +
                ",salary=" + this.salary + ", startDate=" + empDate+ ",note=" + this.note;
         }
     }

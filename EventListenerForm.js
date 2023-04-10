@@ -6,7 +6,7 @@ const createEmployeePayroll = () => {
         setTextValue('.text-erroe',e);
         throw e;
     }
-    employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
+    employeePayrollData.profileImage = getSelectedValues('[name=profile]').pop();
     employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
     employeePayrollData.department = getSelectedValues('[name=department]');
     employeePayrollData.salary = getInputvalueById('#salary');
@@ -35,6 +35,8 @@ const createEmployeePayroll = () => {
             let value = document.getElementById(id).value;
             return value;
         }
+
+        
     
         const salary = document.querySelector('.salary-output');
         const salRange = document.querySelector('#salary');
@@ -74,28 +76,28 @@ function save() {
       username.value +',' +salRange.value +',' +profileImage.value +',' +gender.value +',' +
         departmentValues +',' +startDate +',' +notes.value);
 
-if (window.localStorage.key(1) !== null) {
+if (window.localStorage.key(0) !== null) {
     employeePayrollList = JSON.parse(
       window.localStorage.getItem('employeePayrollData')
     );
   }
 
   let newEmployee = {
+    profileImage: profileImage.value,
     name: username.value,
-    profileImg: profileImage.value,
     gender: gender.value,
     department: departmentValues,
     salary: salRange.value,
     startDate: startDate,
     notes: notes.value,
-  };
-
+  }
+  
   employeePayrollList.push(newEmployee);
-
-  window.alert(employeePayrollList);
-
+  // for(let empDate of employeePayrollList){
+  
+  window.alert(employeePayrollList.length);
   window.localStorage.setItem('employeePayrollData',JSON.stringify(employeePayrollList));
-}
+  
 
 
 const resetForm = () => {
@@ -125,4 +127,5 @@ const setTextValue = (id, value) => {
 const setValue = (id, value) => {
     const element = document.querySelector(id);
     element.value = value;
+}
 }

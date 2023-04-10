@@ -136,6 +136,10 @@ td:first-child {
     align-items: center;
 }
 
+td img:first-child {
+    margin-right: 10px;
+}
+
 td img {
     cursor: pointer;
 }
@@ -151,6 +155,8 @@ td img {
     font-weight: 300;
     margin-bottom: 8px;
 }
+
+
 
 
 

@@ -32,62 +32,48 @@
 // document.querySelector('#table-display').innerHTML = innerHTML;
 // }
 
-
+let employeePayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
+   
+    employeePayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = employeePayrollList.length;
+  
     createInnerHtml();
+    localStorage.removeItem('editEmp');
 });
 
-//Template literal ES^ feature
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('employeePayrollData') ?
+                        JSON.parse(localStorage.getItem('employeePayrollData')) : [];
+};
+
 const createInnerHtml = () => {
+   
+    alert("Hello");
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th>"+
                             "<th>Salary</th><th>Start Date</th><th>Actions</th>";
+    if(employeePayrollList.length == 0) return;
     let innerHTML = `${headerHtml}`;
-    let employeePayrollList = createEmployeePayrollJSON();
     for (const employeePayrollData of employeePayrollList) {
         innerHTML = `${innerHTML}
    <tr>
-     <td><img class="profile"  src="${EmployeePayrollData._profilePic}" alt=""></td>
-     <td>${employeePayrollData._name}</td>
-     <td>${employeePayrollData._gender}</td>
-     <td>${getDeptHtml(employeePayrollData._department)}</td>   
-     <td>${employeePayrollData._salary}</td>
-     <td>${employeePayrollData._StartDate}</td>
+   <td><img class="profile" src="${employeePayrollData.profileImage}" alt=""></td>
+   <td>${employeePayrollData.name}</td>
+   <td>${employeePayrollData.gender}</td>
+   <td>${employeePayrollData.department}</td>
+   <td>${employeePayrollData.salary}</td>
+   <td>${employeePayrollData. startDate}</td>
    <td>
-    <img name = "${employeePayrollData._id}" onclick="remove(this)" src="./delete-black-18dp.svg" alt="delete">
-    <img name = "${employeePayrollData._id}" onclick="update(this)" src="./create-black-18dp (1).svg" alt="edit">
-</td>
+   <img name="${employeePayrollData.id}" onclick="remove(this)" 
+          src="./delete-black-18dp.svg" alt="delete">
+   <img name="${employeePayrollData.id}" onclick="update(this)" 
+          src="./edit.svg" alt="edit">       
+   </td>
 </tr>
 `;
-}
-document.querySelector('#table-display').innerHTML = innerHTML;
-}
+    }
+document.getElementById('table-display').innerHTML = innerHTML;}
 
-
-const createEmployeePayrollJSON = () => {
-    let employeePayrollListLocal = [
-        {
-            _name: 'Praveen Kumar B',
-            _gender: 'male',
-            _department: ['Engineering','Finance'],
-            _salary: '450000',
-            _StartDate: '26 Nov 2020',
-            _note: '',
-            _id: new Date().getTime(),
-            _profilePic: './Ellipse -3.png'
-        },
-        {
-            _name: 'Mohan B',
-            _gender: 'Male',
-            _department: ['HR'],
-            _salary: '500000',
-            _StartDate: '23 Sept 2019',
-            _note: '',
-            _id: new Date().getTime() + 1,
-            _profilePic: './Ellipse -7.png'  
-        }
-    ];
-    return employeePayrollListLocal;
-}
 
 const getDeptHtml = (deptList) => {
     let deptHtml = '';
@@ -97,18 +83,3 @@ const getDeptHtml = (deptList) => {
     return deptHtml;
 }
 
-
-// If not specified then show undefined so we avoid this. 
-//      <div class='dept-label'>${employeePayrollData._department[0]}</div>
-//      <div class='dept-label'>${employeePayrollData._department[1]}</div>
-//    </td>
-
-
-// To get single details at a time
-// let employeePayrollData = createEmployeePayrollJSON()[1];                         
-//     const innerHTML= `${headerHtml}
-
-// let innerHTML = `${headerHtml}`;
-//     let employeePayrollList = createEmployeePayrollJSON();
-//     for (const employeePayrollData of employeePayrollList) {
-//         innerHTML = `${innerHTML}
