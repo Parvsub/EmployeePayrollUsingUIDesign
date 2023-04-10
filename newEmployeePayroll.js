@@ -82,4 +82,3 @@ const getDeptHtml = (deptList) => {
     }
     return deptHtml;
 }
-
