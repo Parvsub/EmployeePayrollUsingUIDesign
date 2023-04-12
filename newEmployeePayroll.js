@@ -32,6 +32,12 @@
 // document.querySelector('#table-display').innerHTML = innerHTML;
 // }
 
+
+// let remove = (e) => {
+//     e.parentElement.parentElement.remove();
+//   };
+//   document.querySelector(".emp-count").textContent = employeePayrollList.length;
+//   createInnerHtml();
 let employeePayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
    
@@ -60,7 +66,7 @@ const createInnerHtml = () => {
    <td><img class="profile" src="${employeePayrollData.profileImage}" alt=""></td>
    <td>${employeePayrollData.name}</td>
    <td>${employeePayrollData.gender}</td>
-   <td>${employeePayrollData.department}</td>
+   <td>${getDeptHtml(employeePayrollData.department)}</td>
    <td>${employeePayrollData.salary}</td>
    <td>${employeePayrollData. startDate}</td>
    <td>
@@ -82,3 +88,37 @@ const getDeptHtml = (deptList) => {
     }
     return deptHtml;
 }
+
+
+ const remove = (row) => {
+ if(confirm('Do you want to delete this record?')){
+    const indexrow = row.parentElement.parentElement.indexrow;
+    employeePayrollList.splice(indexrow,1);
+ }
+ //updates the local storage
+ localStorage.setItem("employeePayrollData",JSON.stringify(employeePayrollList));
+
+ //Update the employee count display
+ document.querySelector(".emp-count").textContent = employeePayrollList.length;
+ createInnerHtml();
+ }  
+
+// function remove(node){
+//   let employeePayrollData1 = employeePayrollList.find((empdata)=> empdata.id == node.name);
+//   if(!employeePayrollData1) return;
+//   const index = employeePayrollList.map(employeedata => employeedata.id).indexof(employeePayrollData1.id);
+//   employeePayrollList.splice(index,1);
+//   localStorage.setItem('employeePayrollData', JSON.stringify(employeePayrollList));
+//   document.querySelector(".emp-count").textContent = employeePayrollList.length;
+//   createInnerHtml();
+// }
+
+// function deletepost(e){
+//   id = e.target.parentElement.parentElement.id
+
+// }
+
+// let remove = (e) => {
+//     e.parentElement.parentElement.remove(employeePayrollList);
+//     localStorage.removeItem(employeePayrollList);
+//   };
