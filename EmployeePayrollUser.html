@@ -2,40 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Employee Payroll App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./EmployeePayrollUsers.css">
-    <title>Employee payroll App</title>
-    <script defer src="./EmployeePayRoll.js"></script>
 </head>
 <body>
-    <!-- UC 1 -->
-    <header class="header-content header">
-        <div class="logo-content">
-          <img src="./logo.png" alt="">
-          <div>
-            <span class="emp-text">EMPLOYEE</span><br>
-            <span class="emp-text emp-payroll">PAYROLL</span><br>
-          </div>
+    <header class="headerContent" id="headStyle">
+        <div class="logoContent">
+            <img src="./logo.png" alt="EmployeeLogo">
+            <div>
+                <span class="employee">EMPLOYEE</span><br>
+                <span class="payroll">PAYROLL</span>
+            </div>
         </div>
-     </header>
-     <div class="main-content">
-       <!-- UC 2 -->
-       <div class="header-content">
-        <div class="emp-detail-text">
-            Employee Details <div class="emp-count">10</div>
+    </header>
+    <!-- Header and name-->
+    <div class="mainContent">
+        <div class="headerContent">
+            <div class="emp-detail-text">
+                Employee Details <div class="emp-count"></div>
+            </div>
+            <a href="./new_Payroll_form.html" class="addButton">
+                <span><img src="./add-24px (2).svg" alt="" width="17"></span>
+                <span id="addLink">Add User</span>
+            </a>
         </div>
-        <a href="./new_payroll_form.html" class="add-button">
-          <img src="./add-24px (2).svg" alt="">Add User</a>
-    </div>      <!-- header-content-->
- </div>
- <table id="table-display" class="table">
-
-    <!-- UC 3 -->
-    
-   </table>
- <div>   <!-- table-main-->
- </div>  <!-- main-content-->
-      <script src="./newEmployeePayroll.js"></script>
+        <!--UC3 : Table format-->
+        <div class="table-main">
+            <table id="display" class="table"> 
+                
+            </table>
+        </div>
+    </div>
+    <script src="./EmployeePayrollData.js"></script>
+    <script src="./EventListenerForm.js"></script>
+    <script src="./newEmployeePayroll.js"></script>
 </body>
 </html>

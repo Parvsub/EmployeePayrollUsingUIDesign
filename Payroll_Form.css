@@ -1,26 +1,24 @@
 body{
     margin: 0;
     height: 100%;
+    font-family: serif;
 }
 .header{
     padding: 15px 0;
-    background-color: #ffffff;
 }
-
 .header-content{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
     border: 0px solid green;
 }
-
 .logo-content{
     display: flex;
     flex-direction: row;
     align-items: center;
     border: 0px solid green;
     width: 80%;
+
 }
 .logo-content-img{border: solid 0px #42515f;}
 .emp-text{
@@ -43,7 +41,7 @@ body{
     align-items: center;
     border: 0px solid green;
 }
-#errormsg{
+#text-error{
     margin-left: 10px;
     font-size:12px;
     font-style: italic;
@@ -72,13 +70,13 @@ body{
 .row-content{
     display: flex;
     flex-direction: row;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     align-items: center;
     border: 0px solid green;
 }
 
 .label{
-    min-width: 140px;
+    min-width: 120px;
 }
 
 label{
@@ -149,18 +147,30 @@ select{
     padding: 7px 7px;
     border: 1px solid #707070;
     cursor: pointer;
+    
 }
 
-.submitButton{
+#errormessage{
+    margin-left: 10px;
+    font-size:12px;
+    font-style: italic;
+    color: red;
+}
+
+.submitButton:hover{
     border: none;
     background: #f5f5f5;
     margin-right: 30px;
+    border-radius: 30px;
+    background-color: aqua;
 }
-.cancelButton{
+.cancelButton:hover{
     text-decoration: none;
     text-align: center;
     background: #f5f5f5;
     border: none;
+    border-radius: 30px;
+    background-color: aqua;
 }
 
 @media only screen and (max-width: 960px){
