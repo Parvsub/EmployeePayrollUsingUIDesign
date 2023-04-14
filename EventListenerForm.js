@@ -1,147 +1,71 @@
-let isUpdate = false;
-let employeePayrollObj = {};
-//let employeePayrollData = new EmployeePayrollData();
-
-const salaryValue = document.querySelector('.salary-output');
-const salaryInputRange = document.querySelector('#salary');
-const nameInput = document.querySelector('#name');
-const nameError = document.querySelector('#errormessage');
-const notes = document.querySelector('#notes');
-
+let empPayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
-    const text = document.querySelector('#name');
-    const errorName = document.querySelector('#errormessage');
-    text.addEventListener('input',function(){
-        if(text.value.length == 0){
-            errorName.textContent = "";
-            return;
-        }
-        try { 
-            (new EmployeePayrollData()).name = text.value;
-            errorName.textContent = "";
-            text.style.border = '2px solid green';
-        }catch (e){
-            errorName.textContent = e;
-            text.style.border = '2px solid red';
-        }
-    });
-
-    const salaryValue = document.querySelector('.salary-output');
-    const salaryInputRange = document.querySelector('#salary');
-    salaryInputRange.addEventListener("input",(event) => {
-    salaryValue.textContent = salaryInputRange.value;
-    });
-
-    checkForUpdate();
+    empPayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
+    createInnerHtml();
+    localStorage.removeItem('editEmp');
 });
 
-// Save the details in local storage
-function save() {
-    const picRadio = document.querySelector('input[name="profile"]:checked');
-    const genderRadio = document.querySelector('input[name="gender"]:checked');
-    const departmentsCheckboxes = document.querySelectorAll('input[class="checkbox"]:checked');
-    let departmentArray = [];
-    departmentsCheckboxes.forEach((x) => {
-        departmentArray.push(x.value);
-    });
-    const salaryInput = document.getElementById("salary");
-    const day = document.getElementById('day');
-    const month = document.getElementById('month');
-    const year = document.getElementById('year');
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('EmployeePayrollList') ?
+                        JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+}
 
-    // Combine the values to form a date string
-    let dateStr = day.value + '-' + month.value + '-' + year.value;
-    const noteInput = document.getElementById("notes");
+// Using Template literal ES6 feature.
+const createInnerHtml = () => {
+    const headerHtml = "<tr><th>Profile</th><th>Name</th><th>Gender</th><th>Department</th>" +
+                        "<th>Salary</th><th>Start Date</th><th>Actions</th></tr>";
+    if (empPayrollList.length == 0) return;
+    let innerHtml = `${headerHtml}`;
+    for (const empPayrollData of empPayrollList) {
+         innerHtml = `${innerHtml}
+        <tr>
+            <td><img class="profile" src="${empPayrollData._profilePic}" alt=""></td>
+            <td>${empPayrollData._name}</td>
+            <td>${empPayrollData._gender}</td>
+            <td>${getDeptHtml(empPayrollData._department)}</td>
+            <td>${empPayrollData._salary}</td>
+            <td>${empPayrollData.date}</td>
+            <td>
+                <img id="${empPayrollData._id}" onclick="remove(this)" src="../pages/delete-black-18dp.svg" alt="delete" width="25">
+                <img id="${empPayrollData._id}" onclick="update(this)" src="../pages/edit.svg" alt="update" width="25">
+            </td>
+        </tr>
+        `;
+    }
+    document.querySelector('#table-display').innerHTML = innerHtml;
+}
 
-    window.alert(nameInput.value +',' + picRadio.value + ',' + genderRadio.value + ',' +
-        departmentArray + ',' + salaryInputRange.value + ',' + dateStr + ',' + notes.value);
+const getDeptHtml = (deptList) => {
+    let deptHtml = '';
+    for (const dept of deptList) {
+        deptHtml = `${deptHtml} <div class="dept-label">${dept}</div>`
+    }
+    return deptHtml;
+}
 
-    let employeePayrollList = [];
-    let formData = {
-        id : Date.now().toString(32),
-        name: nameInput.value,
-        profilePic: picRadio.value,
-        gender: genderRadio.value,
-        department: departmentArray,
-        salary: salaryInputRange.value,
-        startDate: dateStr,
-        note: notes.value
-      };
-
-    // Retrieve existing data from local storage or create a new array if it doesn't exist
-    let data = JSON.parse(localStorage.getItem("formData")) || employeePayrollList;
+// UC1 – Remove an Employee from the Payroll details.
+// Delete Data from home page as well as local storage.
+const remove = (node) => {
+    if(confirm('Do you want to delete this record?')){
+        let empPayrollData = empPayrollList.find(empData => empData._id == node.id);
+        if (!empPayrollData) return;
+        const index = empPayrollList
+                  .map(empData => empData._id)
+                  .indexOf(empPayrollData._id);
+        empPayrollList.splice(index, 1);
+    }
     
-    // Add new form data to the array
-    data.push(formData);
-
-    // Store the updated array back into local storage
-    localStorage.setItem("formData", JSON.stringify(data));
-  
-    // Clear the form inputs for next form input
-    nameInput.value = "";
-    picRadio.value = "";
-    genderRadio.value = "";
-    departmentArray = [];
-    salaryInputRange.value = "";
-    dateStr = "";
-    notes.value = "";
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(empPayrollList));
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
+    createInnerHtml();
 }
 
-function setForm() {
-    document.querySelector('#name').value = employeePayrollObj.name;
-    setSelectedValues("input[name='profile']", employeePayrollObj.profilePic);
-    setSelectedValues("input[name='gender']", employeePayrollObj.gender);
-    setSelectedValues("input[class='checkbox']", employeePayrollObj.department);
-    document.querySelector('#salary').value = employeePayrollObj.salary;
-    document.querySelector('.salary-output').innerHTML = employeePayrollObj.salary;
-    document.querySelector('#notes').value = employeePayrollObj.note;
-    let date = employeePayrollObj.startDate.split('-');
-    document.querySelector('#day').value = date[0];
-    document.querySelector('#month').value = date[1];
-    document.querySelector('#year').value = date[2];
-  }
-  
-  function setSelectedValues(properties, value) {
-    let allItems = document.querySelectorAll(properties);
-    allItems.forEach((item) => {
-      if (Array.isArray(value)) {
-        if (value.includes(item.value)) item.checked = true;
-      } else if (item.value === value) {
-        item.checked = true;
-      }
-    });
-  }
-
-/* Reset the Employee payroll form on clicking reset button*/
-const resetForm = ()=>{
-    setValue('#name','');
-    unsetSelectedValues('[name=profile]');
-    unsetSelectedValues('[name=gender]');
-    unsetSelectedValues('[class=checkbox]');
-    setValue('#salary','');
-    salaryValue.innerHTML = "400000";
-    setValue('#notes','');
-    setValue('#day','1');
-    setValue('#month','January');
-    setValue('#year','2023')
+// Update method
+const update = (node) => {
+    let empPayrollData = empPayrollList.find(empData => empData._id == node.id);
+    if (!empPayrollData) return;
+    localStorage.setItem('editEmp', JSON.stringify(empPayrollData));
+    window.location.href="new_payroll_form.html";
 }
-const unsetSelectedValues = (propertyValue) =>{
-    let allItems = document.querySelectorAll(propertyValue);
-    allItems.forEach(item=>{
-        item.checked=false;
-    });      
-}
-const setValue = (id,value) =>{
-    const element = document.querySelector(id);
-    element.value = value;
-}
-
-function checkForUpdate() {
-    const empPayrollJSON = localStorage.getItem('editEmp');
-    isUpdate = empPayrollJSON ? true : false;
-    if (!isUpdate) return;
-    employeePayrollObj = JSON.parse(empPayrollJSON);
-    setForm();
-}
-
- 
+Foot

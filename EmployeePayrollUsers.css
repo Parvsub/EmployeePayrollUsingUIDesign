@@ -22,14 +22,14 @@ html body{
     width:80%;
     margin-top: 10px;
  }
- .employee{
+ .emp-text{
     color: green;
     font-weight: bolder;
     font-size: 18px;
     color: #82a70c;
     text-transform: capitalize;
  }
- .payroll{
+ .emp-text emp-payroll{
     color:#42515F;
     font-weight:bolder;  
  }

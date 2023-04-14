@@ -1,79 +1,187 @@
-let empPayrollList;
+let isUpdate = false;
+let employeePayrollObj = {};
 window.addEventListener('DOMContentLoaded', (event) => {
-    empPayrollList = getEmpDataFromStorage();
-    document.querySelector(".emp-count").textContent = empPayrollList.length;
-    createInnerHtml();
-    localStorage.removeItem('editEmp');
+    const name = document.querySelector('#name');
+    const textError = document.querySelector('.text-error');
+    name.addEventListener('input', function() {
+        if (name.value.length == 0){
+            textError.textContent = "";
+            return;
+        }
+        try {
+            (new EmployeePayrollData()).name = name.value;
+            textError.textContent = "";
+        }catch (e) {
+            textError.textContent = e;
+        }
+    });
+
+    const salary = document.querySelector('#salary');
+    const output = document.querySelector('.salary-output');
+    salary.addEventListener('input', function() {
+        output.textContent = salary.value;
+    });
+
+    checkForUpdate();
 });
 
-const getEmpDataFromStorage = () => {
-    return localStorage.getItem('formData') 
-    ? JSON.parse(localStorage.getItem('formData')) : [];
-};
-
-/* Using Template Literal */
-const createInnerHtml = () => {   
-    const headerHtml = "<th>Profile Picture</th> <th>Name</th> <th>Gender</th> <th>Department</th>" + 
-                        "<th>Salary</th> <th>Start Date</th> <th>Actions</th>";
-    
-    //if(empPayrollList.length == 0) return;
-    let innerHtml = `${headerHtml}`;
-
-    for(const Employee of empPayrollList){
-        innerHtml = `${innerHtml}
-            <tr> 
-                <td><img class="profile" alt="" src="${Employee.profilePic}"></td>
-                <td>${Employee.name}</td> 
-                <td>${Employee.gender}</td> 
-                <td>${getDeptHtml(Employee.department)}</td>
-                <td>${Employee.salary}</td>
-                <td>${Employee.startDate}</td>
-                <td> 
-                    <img name="${Employee.id}" id="iconAction" alt="delete" onclick="remove(this)"  src="../pages/delete-black-18dp.svg" alt="delete">
-                    <img name="${Employee.id}" id="iconAction" alt="edit" onclick="update(this)"  src="../pages/edit.svg" alt="edit">   
-                </td>
-            </tr>                   
-        `;
+// UC3 – Create Employee Payroll Object on submit button
+const save = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+        setEmployeePayrollObject();
+        createAndUpdateStorage();
+        resetForm();
+        window.location.href="../page/HomePage.html";
+    } catch (e) {
+        return;
     }
-        document.getElementById('display').innerHTML = innerHtml;
-}
-    
-
-const getDeptHtml = (deptList) => {
-    let deptHtml = '';
-    for (const dept of deptList){
-        deptHtml = `${deptHtml} <div class = 'dept-label'>${dept}</div>`;
-    }
-    return deptHtml;
-};
-
-
-//Delete employee details
-const remove = (row) => {
-    if(confirm('Do you want to delete this record?')){
-        //the immediate parent of the row is the <td> , and the next parent of the <td> element is 
-        //the <tr> element that contains the row.
-        const rowIndex = row.parentNode.parentNode.rowIndex;
-
-        //get the id of the record to be removed from the empPayrollList array using the index of the row
-        const id = empPayrollList[rowIndex - 1]._id;
-
-        //the index of the record to be removed and the number of records to be removed(here only one)
-        empPayrollList.splice(rowIndex - 1, 1);
-    }
-    localStorage.setItem("formData", JSON.stringify(empPayrollList));
-    
-    // Update the employee count display
-    document.querySelector(".emp-count").textContent = empPayrollList.length;
-    //re-rendering the table with the updated data.
-    createInnerHtml();
 }
 
-//Edit  
+const setEmployeePayrollObject = () => {
+    employeePayrollObj._name = getInputValueById('#name');
+    employeePayrollObj._profilePic = getSelectedValues('[name = profile]');
+    employeePayrollObj._gender = getSelectedValues('[name = gender]');
+    employeePayrollObj._department = getSelectedValues('[name = department]');
+    employeePayrollObj._salary = getInputValueById('#salary');
+    employeePayrollObj._note = getInputValueById('#notes');
+    let date = getInputValueById('#day')+ " " + getInputValueById('#month') + " " + getInputValueById('#year');
+    employeePayrollObj.date = date;
+}
 
- function update(node) {
-    let newElement = empPayrollList.find((empData) => empData.id == node.name);
-    if (!newElement) return;
-    localStorage.setItem('editEmp', JSON.stringify(newElement));
-    window.location.href = 'new_Payroll_form.html';
-  }
+const getSelectedValues = (propertyValue) => {
+    let allItems = document.querySelectorAll(propertyValue);
+    let selectedItems = [];
+    allItems.forEach(item => {
+        if(item.checked) 
+         selectedItems.push(item.value);
+    });
+    return selectedItems;
+}
+
+const getInputValueById = (id) => {
+    let value = document.querySelector(id).value;
+    return value;
+}
+
+// UC4 – Saving Employee Payroll data to Local Storage.
+const createAndUpdateStorage = () => {
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    if(employeePayrollList) {
+        let empPayrollData = employeePayrollList.
+                             find(empData => empData._id == employeePayrollObj._id);
+        if (!empPayrollData) {
+            employeePayrollList.push(createEmployeePayrollData());
+        } else {
+            const index = employeePayrollList
+                          .map(empData => empData._id)
+                          .indexOf(empPayrollData._id);
+            employeePayrollList.splice(index, 1, createEmployeePayrollData(empPayrollData._id));
+        }
+    } else {
+        employeePayrollList = [createEmployeePayrollData()];
+    }
+    //alert(employeePayrollList.toString());
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+}
+
+const createEmployeePayrollData = (id) => {
+    let employeePayrollData = new EmployeePayrollData();
+    if (!id) employeePayrollData.id = createNewEmployeeId();
+    else employeePayrollData.id = id;
+    setEmployeePayrollData(employeePayrollData);
+    return employeePayrollData;
+}
+
+const setEmployeePayrollData = (employeePayrollData) => {
+    try {
+        employeePayrollData.name = employeePayrollObj._name;
+    } catch (e) {
+        setTextValue('.text-error', e);
+        throw e;
+    }
+    employeePayrollData.profilePic = employeePayrollObj._profilePic;
+    employeePayrollData.gender = employeePayrollObj._gender;
+    employeePayrollData.department = employeePayrollObj._department;
+    employeePayrollData.salary = employeePayrollObj._salary;
+    employeePayrollData.note = employeePayrollObj._note;
+    employeePayrollData.date = employeePayrollObj.date;
+    alert(employeePayrollData.toString());
+}
+
+const createNewEmployeeId = () => {
+    let empId = localStorage.getItem("EmployeeId");
+    empId = !empId ? 1 : (parseInt(empId)+1).toString();
+    localStorage.setItem("EmployeeId",empId);
+    return empId;
+}
+
+const getInputElementValue = (id) => {
+    let value = document.getElementById(id).value;
+    return value;
+} 
+
+const setForm = () => {
+    setValue('#name', employeePayrollObj._name);
+    setSelectedValues('[name = profile]', employeePayrollObj._profilePic);
+    setSelectedValues('[name = gender]', employeePayrollObj._gender);
+    setSelectedValues('[name = department]', employeePayrollObj._department);
+    setValue('#salary', employeePayrollObj._salary);
+    setTextValue('.salary-output', employeePayrollObj._salary);
+    setValue('#notes', employeePayrollObj._note);
+    let date = employeePayrollObj.date.split(" ");
+    setValue('#day', date[0]);
+    setValue('#month', date[1]);
+    setValue('#year', date[2]);
+}
+
+// UC5 – Reset the Employee Payroll Form.
+const resetForm = () => {
+    setValue('#name', "");
+    unsetSelectedValues('[name = profile]');
+    unsetSelectedValues('[name = gender]');
+    unsetSelectedValues('[name = department]');
+    setValue('#salary', '');
+    setValue('#day', '1');
+    setValue('#month', 'January');
+    setValue('#year', '2022');
+}
+
+const unsetSelectedValues = (propertyValue) => {
+    let allItems = document.querySelectorAll(propertyValue);
+    allItems.forEach(item => {
+        item.checked = false;
+    });
+}
+
+const setTextValue = (id, value) => {
+    const element = document.querySelector(id);
+    element.textContent = value;
+}
+
+const setValue = (id, value) => {
+    const element = document.querySelector(id);
+    element.value = value;
+}
+
+checkForUpdate = () => {
+    const employeePayrollJson = localStorage.getItem('editEmp');
+    isUpdate = employeePayrollJson ? true : false;
+    if (!isUpdate) return;
+    employeePayrollObj = JSON.parse(employeePayrollJson);
+    setForm();
+}
+
+const setSelectedValues = (propertyValue, value) => {
+    let allItems = document.querySelectorAll(propertyValue);
+    allItems.forEach(item => {
+        if (Array.isArray(value)) {
+            if (value.includes(item.value)) {
+                item.checked = true;
+            }
+        }
+        else if (item.value === value)
+            item.checked = true;
+    });
+}
